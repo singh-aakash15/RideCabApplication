@@ -13,6 +13,7 @@ import com.myproject.ridecabapp.repositories.RiderRepository;
 import com.myproject.ridecabapp.services.RiderService;
 import com.myproject.ridecabapp.strategies.DriverMatchingStrategy;
 import com.myproject.ridecabapp.strategies.RideFareCalculationStrategy;
+import com.myproject.ridecabapp.strategies.RideStrategyManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
@@ -27,21 +28,22 @@ public class RiderServiceImpl implements RiderService {
 
     private final ModelMapper modelMapper;
     private final RideFareCalculationStrategy rideFareCalculationStrategy;
-    private final DriverMatchingStrategy driverMatchingStrategy;
+    private final RideStrategyManager rideStrategyManager;
     private final RideRequestRepository rideRequestRepository;
     private final RiderRepository riderRepository;
 
     @Override
     public RideRequestDto requestRide(RideRequestDto rideRequestDto) {
+        Rider rider= getCurrentRider();
         RideRequest rideRequest = modelMapper.map(rideRequestDto, RideRequest.class);
         rideRequest.setRideRequestStatus(RideRequestStatus.PENDING);
 
-        Double fare = rideFareCalculationStrategy.calculateFare(rideRequest);
+        Double fare = rideStrategyManager.rideFareCalculationStrategy().calculateFare(rideRequest);
         rideRequest.setFare(fare);
 
         RideRequest savedRideRequest = rideRequestRepository.save(rideRequest);
 
-        driverMatchingStrategy.findMatchingDriver(rideRequest);
+        rideStrategyManager.driverMatchingStrategy(rider.getRating()).findMatchingDriver(rideRequest);
 
         return modelMapper.map(savedRideRequest, RideRequestDto.class);
     }
@@ -74,5 +76,12 @@ public class RiderServiceImpl implements RiderService {
                 .rating(0.0)
                 .build();
         return riderRepository.save(rider);
+    }
+
+    @Override
+    public Rider getCurrentRider() {
+
+        //impelement spring security
+        return riderRepository.findById(1L).orElseThrow(()-> new RuntimeException("Rider not found"));
     }
 }
