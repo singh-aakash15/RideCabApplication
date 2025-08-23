@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.codingshuttle.project.uber</groupId>
-	<artifactId>uberApp</artifactId>
+	<artifactId>RideCabApp</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>uberApp</name>
 	<description>Uber Project in Spring Boot</description>
@@ -27,7 +27,7 @@
 		<url/>
 	</scm>
 	<properties>
-		<java.version>22</java.version>
+		<java.version>23</java.version>
 	</properties>
 	<dependencies>
 		<dependency>

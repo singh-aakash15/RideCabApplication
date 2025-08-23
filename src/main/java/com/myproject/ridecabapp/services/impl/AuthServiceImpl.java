@@ -1,0 +1,57 @@
+package com.myproject.ridecabapp.services.impl;
+
+import com.myproject.ridecabapp.dto.DriverDto;
+import com.myproject.ridecabapp.dto.SignupDto;
+import com.myproject.ridecabapp.dto.UserDto;
+import com.myproject.ridecabapp.entities.User;
+import com.myproject.ridecabapp.entities.enums.Role;
+import com.myproject.ridecabapp.exceptions.RuntimeConflictException;
+import com.myproject.ridecabapp.repositories.UserRepository;
+import com.myproject.ridecabapp.services.AuthService;
+import com.myproject.ridecabapp.services.RiderService;
+import lombok.RequiredArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Set;
+
+@Service
+@RequiredArgsConstructor
+public class AuthServiceImpl implements AuthService {
+
+    private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
+    private final RiderService riderService;
+
+    @Override
+    public String login(String email, String password) {
+        return "";
+    }
+
+    @Override
+    @Transactional //either whole thing will be completed or will be rolled back
+    public UserDto signup(SignupDto signupDto) {
+        User user = userRepository.findByEmail(signupDto.getEmail()).orElse(null);
+        if(user != null)
+                throw new RuntimeConflictException("Cannot signup, User already exists with email "+signupDto.getEmail()); //we will handle this exception seperately
+
+        User mappedUser = modelMapper.map(signupDto, User.class);
+        mappedUser.setRoles(Set.of(Role.RIDER)); //we give any user a rider at first, admin will give the drivver role
+        User savedUser = userRepository.save(mappedUser);
+
+//        create user related entities
+        //create user related entitities
+        //creating a rider
+        riderService.createNewRider(savedUser);
+//        TODO add wallet related service here
+
+        // also need to add wallet
+        return modelMapper.map(savedUser, UserDto.class); // return userdto
+    }
+
+    @Override
+    public DriverDto onboardNewDriver(Long userId) {
+        return null;
+    }
+}
