@@ -3,12 +3,13 @@ package com.myproject.ridecabapp.services;
 import com.myproject.ridecabapp.dto.DriverDto;
 import com.myproject.ridecabapp.dto.RideDto;
 import com.myproject.ridecabapp.dto.RiderDto;
+import com.myproject.ridecabapp.entities.Driver;
 
 import java.util.List;
 
 public interface DriverService {
 
-    RideDto acceptRide(Long rideId);
+    RideDto acceptRide(Long rideRequestId);
 
     RideDto cancelRide(Long rideId);
 
@@ -21,4 +22,6 @@ public interface DriverService {
     DriverDto getMyProfile();
 
     List<RideDto> getAllMyRides();
+
+    Driver getCurrentDriver();
 }

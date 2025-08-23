@@ -23,7 +23,7 @@ import java.util.List;
 @Repository
 public interface DriverRepository extends JpaRepository<Driver, Long> {
     @Query(value = "SELECT d.*, ST_Distance(d.current_location, :pickupLocation) AS distance " +
-            "FROM drivers d " +
+            "FROM driver d " +
             "WHERE d.available = true AND ST_DWithin(d.current_location, :pickupLocation, 10000) " +
             "ORDER BY distance " +
             "LIMIT 10", nativeQuery = true)  //this geodb is smart enough that it has created indexes for us
@@ -35,9 +35,9 @@ public interface DriverRepository extends JpaRepository<Driver, Long> {
 
     //Our SQL db has knowledge of these Queries by itself due to PostGis extention
     @Query(value="SELECT d.*, " +
-            "FROM drivers d " +
+            "FROM driver d " +
             "WHERE d.available = true AND ST_DWithin(d.current_location, :pickupLocation, 15000) " +
-            " ORDER BY d.rating DESC" +
+            " ORDER BY d.rating DESC " +
             "LIMIT 10", nativeQuery = true )  //only 10 drivers
     List<Driver> findTenNearByTopRatedDrivers(Point pickupLocation);
 }

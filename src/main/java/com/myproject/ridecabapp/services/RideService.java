@@ -3,6 +3,7 @@ package com.myproject.ridecabapp.services;
 import com.myproject.ridecabapp.dto.RideRequestDto;
 import com.myproject.ridecabapp.entities.Driver;
 import com.myproject.ridecabapp.entities.Ride;
+import com.myproject.ridecabapp.entities.RideRequest;
 import com.myproject.ridecabapp.entities.enums.RideStatus;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -13,7 +14,7 @@ public interface RideService {
 
     void matchWithDrivers(RideRequestDto rideRequestDto);
 
-    Ride createNewRide(RideRequestDto rideRequestDto, Driver driver);
+    Ride createNewRide(RideRequest rideRequest, Driver driver);
 
     Ride updateRideStatus(Long rideId, RideStatus rideStatus);
 
