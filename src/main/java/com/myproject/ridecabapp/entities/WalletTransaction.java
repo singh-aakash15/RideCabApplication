@@ -3,11 +3,17 @@ package com.myproject.ridecabapp.entities;
 import com.myproject.ridecabapp.entities.enums.TransactionMethod;
 import com.myproject.ridecabapp.entities.enums.TransactionType;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 
 @Entity
+@Builder
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class WalletTransaction {
 
     @Id
@@ -34,4 +40,5 @@ public class WalletTransaction {
 
     @CreationTimestamp
     private LocalDateTime timeStamp;
+
 }

@@ -9,6 +9,7 @@ import com.myproject.ridecabapp.exceptions.RuntimeConflictException;
 import com.myproject.ridecabapp.repositories.UserRepository;
 import com.myproject.ridecabapp.services.AuthService;
 import com.myproject.ridecabapp.services.RiderService;
+import com.myproject.ridecabapp.services.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class AuthServiceImpl implements AuthService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final RiderService riderService;
+    private final WalletService walletService;
 
     @Override
     public String login(String email, String password) {
@@ -45,6 +47,7 @@ public class AuthServiceImpl implements AuthService {
         //creating a rider
         riderService.createNewRider(savedUser);
 //        TODO add wallet related service here
+        walletService.createNewWallet(savedUser);
 
         // also need to add wallet
         return modelMapper.map(savedUser, UserDto.class); // return userdto

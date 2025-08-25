@@ -3,11 +3,17 @@ package com.myproject.ridecabapp.entities;
 import com.myproject.ridecabapp.entities.enums.PaymentMethod;
 import com.myproject.ridecabapp.entities.enums.PaymentStatus;
 import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
 
 import java.time.LocalDateTime;
 // contain payment status for a ride. we can connect ride to the wallet or payment method
 @Entity
+@Getter
+@Builder
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class Payment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

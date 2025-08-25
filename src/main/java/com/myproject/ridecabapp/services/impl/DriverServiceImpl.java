@@ -11,6 +11,7 @@ import com.myproject.ridecabapp.entities.enums.RideStatus;
 import com.myproject.ridecabapp.exceptions.ResourceNotFoundException;
 import com.myproject.ridecabapp.repositories.DriverRepository;
 import com.myproject.ridecabapp.services.DriverService;
+import com.myproject.ridecabapp.services.PaymentService;
 import com.myproject.ridecabapp.services.RideRequestService;
 import com.myproject.ridecabapp.services.RideService;
 import lombok.RequiredArgsConstructor;
@@ -32,6 +33,7 @@ public class DriverServiceImpl implements DriverService {
     private final RideService rideService;
     private final RideRequestService rideRequestService;
     private final ModelMapper modelMapper;
+    private final PaymentService paymentService;
     @Override
     @Transactional
     public RideDto acceptRide(Long rideRequestId) {
@@ -96,6 +98,9 @@ public class DriverServiceImpl implements DriverService {
        // update ride status to started
         ride.setStartedAt(LocalDateTime.now());
         Ride savedRide=rideService.updateRideStatus(ride,RideStatus.ONGOING);
+
+        //create a payment method as soon as ride is started
+        paymentService.createNewPayment(savedRide);
        return modelMapper.map(savedRide,RideDto.class);
     }
 
