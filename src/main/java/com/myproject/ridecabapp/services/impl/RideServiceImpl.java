@@ -1,6 +1,5 @@
 package com.myproject.ridecabapp.services.impl;
 
-import com.myproject.ridecabapp.dto.RideRequestDto;
 import com.myproject.ridecabapp.entities.Driver;
 import com.myproject.ridecabapp.entities.Ride;
 import com.myproject.ridecabapp.entities.RideRequest;

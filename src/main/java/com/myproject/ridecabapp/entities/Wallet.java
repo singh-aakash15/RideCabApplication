@@ -3,7 +3,7 @@ package com.myproject.ridecabapp.entities;
 import jakarta.persistence.*;
 
 import java.util.List;
-// Wallett, Each entity belongs to a user, a rider/driver/user can have a wallett
+// Wallet, Each entity belongs to a user, a rider/driver/user can have a wallet
 @Entity
 public class Wallet {
 

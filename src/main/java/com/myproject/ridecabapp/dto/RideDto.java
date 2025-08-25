@@ -3,7 +3,6 @@ package com.myproject.ridecabapp.dto;
 import com.myproject.ridecabapp.entities.enums.PaymentMethod;
 import com.myproject.ridecabapp.entities.enums.RideStatus;
 import lombok.Data;
-import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDateTime;
 
