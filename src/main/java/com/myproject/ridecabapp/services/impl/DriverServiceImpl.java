@@ -15,11 +15,12 @@ import com.myproject.ridecabapp.services.RideRequestService;
 import com.myproject.ridecabapp.services.RideService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 @Service
 @Transactional
@@ -45,8 +46,8 @@ public class DriverServiceImpl implements DriverService {
             throw new RuntimeException("Driver is not available");
         }
 
-        currentDriver.setAvailable(false);
-        Driver savedDriver=driverRepository.save(currentDriver);
+
+        Driver savedDriver=updateDriverAvailabilty(currentDriver,true);
 
         Ride ride=rideService.createNewRide(rideRequest,savedDriver); // creating a new ride
 
@@ -57,7 +58,22 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public RideDto cancelRide(Long rideId) {
-        return null;
+        //only cancel ride if ride not started
+        Ride ride= rideService.getRideById(rideId);
+        Driver driver=getCurrentDriver();
+        if(!driver.equals(ride.getDriver())){  //verifying if driver owns this ride
+            throw new RuntimeException("Driver does not own this ride");
+        }
+
+        if(!ride.getRideStatus().equals(RideStatus.CONFIRMED)){  //verifying if ride is confirmed,only can be cancelled if status confirmed
+            throw new RuntimeException("Invalid Status" + ride.getRideStatus);
+        }
+
+        rideService.updateRideStatus(ride,RideStatus.CANCELLED);
+        updateDriverAvailabilty(driver,true);
+
+
+        return modelMapper.map(ride,RideDto.class);
     }
 
     @Override
@@ -65,7 +81,7 @@ public class DriverServiceImpl implements DriverService {
         // we need to check if driver owns this ride
         Ride ride= rideService.getRideById(rideId);
         Driver driver=getCurrentDriver();
-        if(!driver.equals(ride.getDriver())){
+        if(!driver.equals(ride.getDriver())){ //verifying if driver owns this ride
             throw new RuntimeException("Driver does not own this ride");
         }
 
@@ -95,15 +111,28 @@ public class DriverServiceImpl implements DriverService {
 
     @Override
     public DriverDto getMyProfile() {
-        return null;
+        Driver currentDriver = getCurrentDriver();
+        return modelMapper.map(currentDriver, DriverDto.class);
     }
 
     @Override
-    public List<RideDto> getAllMyRides() {
-        return List.of();
+    public Page<RideDto> getAllMyRides(PageRequest pageRequest) {
+        Driver currentDriver = getCurrentDriver();
+        return rideService.getAllRidesOfDriver(currentDriver.getId(), pageRequest).map(
+                ride -> modelMapper.map(ride, RideDto.class)
+        );
     }
     @Override
     public Driver getCurrentDriver() {
         return driverRepository.findById(1L).orElseThrow(()->new ResourceNotFoundException("Driver not found"));
     }
-}
+
+    @Override
+    public Driver updateDriverAvailabilty(Driver driver, boolean available) {
+        driver.setAvailable(available);
+
+        driverRepository.save(driver);
+        return driver;
+    }
+    }
+

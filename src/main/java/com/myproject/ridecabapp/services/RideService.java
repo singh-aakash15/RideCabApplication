@@ -12,7 +12,6 @@ public interface RideService {
 
     Ride getRideById(Long rideId);
 
-    void matchWithDrivers(RideRequestDto rideRequestDto);
 
     Ride createNewRide(RideRequest rideRequest, Driver driver);
 

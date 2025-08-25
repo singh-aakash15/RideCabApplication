@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class Ride {
 
+    public String getRideStatus;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

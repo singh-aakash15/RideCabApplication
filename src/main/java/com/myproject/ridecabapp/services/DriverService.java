@@ -4,8 +4,8 @@ import com.myproject.ridecabapp.dto.DriverDto;
 import com.myproject.ridecabapp.dto.RideDto;
 import com.myproject.ridecabapp.dto.RiderDto;
 import com.myproject.ridecabapp.entities.Driver;
-
-import java.util.List;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 
 public interface DriverService {
 
@@ -21,7 +21,11 @@ public interface DriverService {
 
     DriverDto getMyProfile();
 
-    List<RideDto> getAllMyRides();
+    Page<RideDto> getAllMyRides(PageRequest pageRequest);
 
     Driver getCurrentDriver();
+
+    Driver updateDriverAvailabilty(Driver driver, boolean available);
+
+
 }

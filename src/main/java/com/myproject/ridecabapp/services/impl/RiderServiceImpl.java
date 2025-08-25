@@ -4,13 +4,13 @@ import com.myproject.ridecabapp.dto.DriverDto;
 import com.myproject.ridecabapp.dto.RideDto;
 import com.myproject.ridecabapp.dto.RideRequestDto;
 import com.myproject.ridecabapp.dto.RiderDto;
-import com.myproject.ridecabapp.entities.Driver;
-import com.myproject.ridecabapp.entities.RideRequest;
-import com.myproject.ridecabapp.entities.Rider;
-import com.myproject.ridecabapp.entities.User;
+import com.myproject.ridecabapp.entities.*;
 import com.myproject.ridecabapp.entities.enums.RideRequestStatus;
+import com.myproject.ridecabapp.entities.enums.RideStatus;
 import com.myproject.ridecabapp.repositories.RideRequestRepository;
 import com.myproject.ridecabapp.repositories.RiderRepository;
+import com.myproject.ridecabapp.services.DriverService;
+import com.myproject.ridecabapp.services.RideService;
 import com.myproject.ridecabapp.services.RiderService;
 import com.myproject.ridecabapp.strategies.RideStrategyManager;
 import lombok.RequiredArgsConstructor;
@@ -29,7 +29,9 @@ public class RiderServiceImpl implements RiderService {
     private final ModelMapper modelMapper;
     private final RideStrategyManager rideStrategyManager;
     private final RideRequestRepository rideRequestRepository;
+    private final RideService rideService;
     private final RiderRepository riderRepository;
+    private final DriverService driverService;
 
     @Override
     @Transactional
@@ -52,7 +54,19 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public RideDto cancelRide(Long rideId) {
-        return null;
+        Rider rider=getCurrentRider();
+        Ride ride= rideService.getRideById(rideId);
+        if(!ride.getRider().equals(rider)){
+            throw new RuntimeException("Rider does not own this ride");
+        }
+        if(!ride.getRideStatus().equals(RideStatus.CONFIRMED)){  //verifying if ride is confirmed,only can be cancelled if status confirmed
+            throw new RuntimeException("Invalid Status" + ride.getRideStatus);
+        }
+
+        Ride savedRide=rideService.updateRideStatus(ride,RideStatus.CANCELLED);
+
+        driverService.updateDriverAvailabilty(ride.getDriver(), true);
+        return modelMapper.map(savedRide, RideDto.class);
     }
 
     @Override
