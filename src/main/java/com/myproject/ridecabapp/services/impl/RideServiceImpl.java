@@ -4,6 +4,7 @@ import com.myproject.ridecabapp.dto.RideRequestDto;
 import com.myproject.ridecabapp.entities.Driver;
 import com.myproject.ridecabapp.entities.Ride;
 import com.myproject.ridecabapp.entities.RideRequest;
+import com.myproject.ridecabapp.entities.Rider;
 import com.myproject.ridecabapp.entities.enums.RideRequestStatus;
 import com.myproject.ridecabapp.entities.enums.RideStatus;
 import com.myproject.ridecabapp.exceptions.ResourceNotFoundException;
@@ -54,13 +55,13 @@ public class RideServiceImpl implements RideService {
 
 
     @Override
-    public Page<Ride> getAllRidesOfRider(Long riderId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRidesOfRider(Rider rider, PageRequest pageRequest) {
+        return rideRepository.findByRider(rider, pageRequest);
     }
 
     @Override
-    public Page<Ride> getAllRidesOfDriver(Long driverId, PageRequest pageRequest) {
-        return null;
+    public Page<Ride> getAllRidesOfDriver(Driver driver, PageRequest pageRequest) {
+        return rideRepository.findByDriver(driver, pageRequest);
     }
 
     private String generateRandomOTP() {

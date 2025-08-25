@@ -16,6 +16,8 @@ import com.myproject.ridecabapp.strategies.RideStrategyManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -80,8 +82,11 @@ public class RiderServiceImpl implements RiderService {
     }
 
     @Override
-    public List<RideDto> getAllMyRides() {
-        return List.of();
+    public Page<RideDto> getAllMyRides(PageRequest pageRequest) {
+        Rider currentRider = getCurrentRider();
+        return rideService.getAllRidesOfRider(currentRider, pageRequest).map(
+                ride -> modelMapper.map(ride, RideDto.class)
+        );
     }
 
     @Override
