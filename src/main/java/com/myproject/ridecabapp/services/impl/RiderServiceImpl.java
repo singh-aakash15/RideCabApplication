@@ -10,6 +10,7 @@ import com.myproject.ridecabapp.entities.enums.RideStatus;
 import com.myproject.ridecabapp.repositories.RideRequestRepository;
 import com.myproject.ridecabapp.repositories.RiderRepository;
 import com.myproject.ridecabapp.services.DriverService;
+import com.myproject.ridecabapp.services.RatingService;
 import com.myproject.ridecabapp.services.RideService;
 import com.myproject.ridecabapp.services.RiderService;
 import com.myproject.ridecabapp.strategies.RideStrategyManager;
@@ -34,6 +35,7 @@ public class RiderServiceImpl implements RiderService {
     private final RideService rideService;
     private final RiderRepository riderRepository;
     private final DriverService driverService;
+    private final RatingService ratingService;
 
     @Override
     @Transactional
@@ -73,7 +75,18 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public DriverDto rateDriver(Long rideId, Integer rating) {
-        return null;
+        Ride ride = rideService.getRideById(rideId);
+        Rider rider = getCurrentRider();
+
+        if(!rider.equals(ride.getRider())) {
+            throw new RuntimeException("Rider is not the owner of this Ride");
+        }
+
+        if(!ride.getRideStatus().equals(RideStatus.ENDED)) {
+            throw new RuntimeException("Ride status is not Ended hence cannot start rating, status: "+ride.getRideStatus());
+        }
+
+        return ratingService.rateDriver(ride, rating);
     }
 
     @Override

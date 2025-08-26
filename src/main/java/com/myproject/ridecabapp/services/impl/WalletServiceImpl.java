@@ -68,7 +68,7 @@ public class WalletServiceImpl implements WalletService {
                 .build();
 
         walletTransactionService.createNewWalletTransaction(walletTransaction);
-        return wallet.save(wallet);
+        return walletRepository.save(wallet);
     }
 
     @Override

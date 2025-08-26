@@ -3,11 +3,13 @@ package com.myproject.ridecabapp.services.impl;
 import com.myproject.ridecabapp.dto.DriverDto;
 import com.myproject.ridecabapp.dto.SignupDto;
 import com.myproject.ridecabapp.dto.UserDto;
+import com.myproject.ridecabapp.entities.Driver;
 import com.myproject.ridecabapp.entities.User;
 import com.myproject.ridecabapp.entities.enums.Role;
 import com.myproject.ridecabapp.exceptions.RuntimeConflictException;
 import com.myproject.ridecabapp.repositories.UserRepository;
 import com.myproject.ridecabapp.services.AuthService;
+import com.myproject.ridecabapp.services.DriverService;
 import com.myproject.ridecabapp.services.RiderService;
 import com.myproject.ridecabapp.services.WalletService;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +19,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Set;
 
+import static com.myproject.ridecabapp.entities.enums.Role.DRIVER;
+
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
 
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
     private final RiderService riderService;
     private final WalletService walletService;
+    private final DriverService driverService;
 
     @Override
     public String login(String email, String password) {
@@ -54,7 +60,23 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public DriverDto onboardNewDriver(Long userId) {
-        return null;
+    public DriverDto onboardNewDriver(Long userId,String vehicleId ) {
+       User user=userRepository.findById(userId).orElseThrow(()-> new RuntimeException("User not found"));
+       if(user.getRoles().contains(DRIVER))
+       {
+           throw new RuntimeException("User already a driver");
+       }
+        Driver createDriver= Driver.builder()
+                .id(userId)
+                .rating(0.0)
+                .vehicleId(vehicleId)
+                .available(true)
+                .build();
+       user.getRoles().add(DRIVER);
+       userRepository.save(user);
+       Driver savedDriver= driverService.createNewDriver(createDriver);
+
+       return modelMapper.map(savedDriver,DriverDto.class);
+
     }
 }

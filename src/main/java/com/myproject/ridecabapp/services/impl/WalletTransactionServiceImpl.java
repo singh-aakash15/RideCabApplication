@@ -16,6 +16,6 @@ public class WalletTransactionServiceImpl implements WalletTransactionService {
 
     @Override
     public void createNewWalletTransaction(WalletTransaction walletTransaction) {
-
+        walletTransactionRepository.save(walletTransaction);
     }
 }
