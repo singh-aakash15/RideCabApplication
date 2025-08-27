@@ -6,6 +6,7 @@ import com.myproject.ridecabapp.dto.UserDto;
 import com.myproject.ridecabapp.entities.Driver;
 import com.myproject.ridecabapp.entities.User;
 import com.myproject.ridecabapp.entities.enums.Role;
+import com.myproject.ridecabapp.exceptions.ResourceNotFoundException;
 import com.myproject.ridecabapp.exceptions.RuntimeConflictException;
 import com.myproject.ridecabapp.repositories.UserRepository;
 import com.myproject.ridecabapp.security.JWTService;
@@ -97,5 +98,15 @@ public class AuthServiceImpl implements AuthService {
 
        return modelMapper.map(savedDriver,DriverDto.class);
 
+    }
+
+
+    @Override
+    public String refreshToken(String refreshToken) {
+        Long userId = jwtService.getUserIdFromToken(refreshToken);
+        User user = userRepository.findById(userId).orElseThrow(() -> new ResourceNotFoundException("User not found " +
+                "with id: "+userId));
+
+        return jwtService.generateAccessToken(user);
     }
 }
