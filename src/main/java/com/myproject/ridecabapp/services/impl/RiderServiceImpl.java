@@ -7,6 +7,7 @@ import com.myproject.ridecabapp.dto.RiderDto;
 import com.myproject.ridecabapp.entities.*;
 import com.myproject.ridecabapp.entities.enums.RideRequestStatus;
 import com.myproject.ridecabapp.entities.enums.RideStatus;
+import com.myproject.ridecabapp.exceptions.ResourceNotFoundException;
 import com.myproject.ridecabapp.repositories.RideRequestRepository;
 import com.myproject.ridecabapp.repositories.RiderRepository;
 import com.myproject.ridecabapp.services.DriverService;
@@ -19,6 +20,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -114,8 +116,10 @@ public class RiderServiceImpl implements RiderService {
 
     @Override
     public Rider getCurrentRider() {
+        User user= (User) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
 
         //impelement spring security
-        return riderRepository.findById(1L).orElseThrow(()-> new RuntimeException("Rider not found"));
+        return riderRepository.findByUser(user).orElseThrow(()-> new ResourceNotFoundException("" +
+                "Rider not found with id:"+user.getId()));
     }
 }

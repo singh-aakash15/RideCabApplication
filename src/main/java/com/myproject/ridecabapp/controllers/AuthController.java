@@ -2,14 +2,19 @@ package com.myproject.ridecabapp.controllers;
 
 import com.myproject.ridecabapp.dto.*;
 import com.myproject.ridecabapp.services.AuthService;
+import jakarta.servlet.http.Cookie;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/auth")
 @RequiredArgsConstructor
+@Secured("ROLE_ADMIN")
 public class AuthController {
 
     private final AuthService authService;
@@ -25,8 +30,17 @@ public class AuthController {
     }
 
     @PostMapping("/login") //used to return access token
-    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
-        String[] tokens = authService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword()); //access token at 0th position
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto,
+                                                  HttpServletRequest httpServletRequest,
+                                                  HttpServletResponse httpServletResponse){
+        String[] tokens = authService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword());
+
+        Cookie cookie= new Cookie("token",tokens[1]);
+        cookie.setHttpOnly(true);  //JS cannot access this cookie on the client browser
+
+        httpServletResponse.addCookie(cookie);
+
+        //access token at 0th position
         return ResponseEntity.ok(new LoginResponseDto(tokens[0]));
     }
 }
