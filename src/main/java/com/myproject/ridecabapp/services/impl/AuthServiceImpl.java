@@ -14,6 +14,7 @@ import com.myproject.ridecabapp.services.RiderService;
 import com.myproject.ridecabapp.services.WalletService;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,10 +32,15 @@ public class AuthServiceImpl implements AuthService {
     private final RiderService riderService;
     private final WalletService walletService;
     private final DriverService driverService;
+    private final PasswordEncoder passwordEncoder;
 
     @Override
-    public String login(String email, String password) {
-        return "";
+    public String[] login(String email, String password) {
+        String [] tokens= new String[2];
+
+
+
+        return tokens;
     }
 
     @Override
@@ -45,7 +51,9 @@ public class AuthServiceImpl implements AuthService {
                 throw new RuntimeConflictException("Cannot signup, User already exists with email "+signupDto.getEmail()); //we will handle this exception seperately
 
         User mappedUser = modelMapper.map(signupDto, User.class);
-        mappedUser.setRoles(Set.of(Role.RIDER)); //we give any user a rider at first, admin will give the drivver role
+        mappedUser.setRoles(Set.of(Role.RIDER));
+        mappedUser.setPassword(passwordEncoder.encode(mappedUser.getPassword()));
+        //we give any user a rider at first, admin will give the drivver role
         User savedUser = userRepository.save(mappedUser);
 
 //        create user related entities

@@ -1,9 +1,6 @@
 package com.myproject.ridecabapp.controllers;
 
-import com.myproject.ridecabapp.dto.DriverDto;
-import com.myproject.ridecabapp.dto.OnboardDriverDto;
-import com.myproject.ridecabapp.dto.SignupDto;
-import com.myproject.ridecabapp.dto.UserDto;
+import com.myproject.ridecabapp.dto.*;
 import com.myproject.ridecabapp.services.AuthService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -25,5 +22,11 @@ public class AuthController {
     ResponseEntity<DriverDto> onBoardNewDriver(@PathVariable Long userId, @RequestBody OnboardDriverDto onboardDriverDto) {
         return new ResponseEntity<>(authService.onboardNewDriver(userId,
                 onboardDriverDto.getVehicleId()), HttpStatus.CREATED);
+    }
+
+    @PostMapping("/login") //used to return access token
+    public ResponseEntity<LoginResponseDto> login(@RequestBody LoginRequestDto loginRequestDto){
+        String[] tokens = authService.login(loginRequestDto.getEmail(), loginRequestDto.getPassword()); //access token at 0th position
+        return ResponseEntity.ok(new LoginResponseDto(tokens[0]));
     }
 }
