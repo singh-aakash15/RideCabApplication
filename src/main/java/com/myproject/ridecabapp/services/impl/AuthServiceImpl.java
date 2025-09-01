@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService {
     private final PasswordEncoder passwordEncoder;
     private final AuthenticationManager authenticationManager;
 
-    private JWTService jwtService;
+    private final JWTService jwtService;
 
     @Override
     public String[] login(String email, String password) {
