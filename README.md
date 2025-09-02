@@ -1,24 +1,9 @@
-# 🚖 Spring Boot Uber App  
+# 🚖 Spring Boot RideCab App (Uber Clone) 
 
 A backend clone of **Uber** implemented using **Java Spring Boot**.  
 This project demonstrates a **real-world ride-hailing application** backend with features like **user onboarding, driver management, ride booking, fare calculation, ride completion, and rating system**.  
 
 ---
-
-## 📌 Table of Contents  
-- [Overview](#overview)  
-- [Architecture](#architecture)  
-- [Features](#features)  
-- [Tech Stack](#tech-stack)  
-- [Database Design](#database-design)  
-- [Project Structure](#project-structure)  
-- [Getting Started](#getting-started)  
-- [API Endpoints](#api-endpoints)  
-- [Sample Flow](#sample-flow)  
-- [Future Enhancements](#future-enhancements)  
-- [Contributing](#contributing)  
-- [License](#license)  
-
 ---
 
 ## 📝 Overview  
