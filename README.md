@@ -29,7 +29,7 @@ It is designed to **simulate production-grade APIs** that can be integrated with
 - **Database**: PostgreSQL (or in-memory H2 for testing)  
 - Authentication: JWT (if implemented)  
 
-📌 **High-level Flow**:  
+## 📌 **High-level Flow**:  
 User → REST API → Controller → Service → Repository → Database
 Driver → REST API → Controller → Service → Repository → Database
 ---
@@ -155,10 +155,10 @@ Swagger UI:
 
 ## 🔄 Sample Flow
 
-1.User registers & logs in
+1. User registers & logs in
 → gets JWT token
 
-2.User requests ride
+2. User requests ride
 
 {
   "userId": 1,
@@ -167,7 +167,7 @@ Swagger UI:
 }
 
 
-3.System assigns a driver (nearest available)
+3. System assigns a driver (nearest available)
 Response:
 
 {
@@ -178,11 +178,11 @@ Response:
 }
 
 
-4.Driver accepts & completes ride
+4. Driver accepts & completes ride
 
-5.Payment processed (wallet or cash)
+5. Payment processed (wallet or cash)
 
-6.Both rate each other
+6. Both rate each other
 
 ## 🔮 Future Enhancements
 
