@@ -91,6 +91,7 @@ Driver → REST API → Controller → Service → Repository → Database
 
 ## 📂 Project Structure  
 
+```
 src/main/java/com/uber/app/
 │── controller/ # REST Controllers (UserController, DriverController, RideController)
 │── service/ # Business logic
@@ -99,6 +100,7 @@ src/main/java/com/uber/app/
 │── dto/ # Data Transfer Objects (Request/Response payloads)
 │── config/ # Security, Swagger configs
 │── exception/ # Custom exception handling
+```
 
 
 ---
