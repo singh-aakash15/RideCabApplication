@@ -153,7 +153,7 @@ Swagger UI:
 | GET    | `/api/ratings/{rideId}` | Get ride rating        |
 
 
-##🔄 Sample Flow
+## 🔄 Sample Flow
 
 1.User registers & logs in
 → gets JWT token
@@ -184,7 +184,7 @@ Response:
 
 6.Both rate each other
 
-##🔮 Future Enhancements
+## 🔮 Future Enhancements
 
 🚦 Real-time tracking with WebSockets
 
