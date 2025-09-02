@@ -4,55 +4,6 @@ A backend clone of **Uber** implemented using **Java Spring Boot**.
 This project demonstrates a **real-world ride-hailing application** backend with features like **user onboarding, driver management, ride booking, fare calculation, ride completion, and rating system**.  
 
 ---
----
-
-## 📝 Overview  
-
-This project is a **backend-only implementation** of Uber-like services.  
-It handles the **complete lifecycle of a ride**:  
-
-1. User requests a ride  
-2. System assigns a driver  
-3. Fare is calculated based on distance  
-4. Ride is completed and payment processed  
-5. Ratings collected from both sides  
-
-It is designed to **simulate production-grade APIs** that can be integrated with a mobile frontend (Android/iOS) or web UI.  
-
----
-
-## 🏗️ Architecture  
-
-- **Spring Boot Monolith** (can be split into microservices later)  
-- RESTful APIs with **Spring MVC**  
-- **Service Layer** for business logic  
-- **Repository Layer** for database access (Spring Data JPA)  
-- **Database**: PostgreSQL (or in-memory H2 for testing)  
-- Authentication: JWT (if implemented)  
-
-📌 **High-level Flow**:  
-# 🚖 Spring Boot Uber App  
-
-A backend clone of **Uber** implemented using **Java Spring Boot**.  
-This project demonstrates a **real-world ride-hailing application** backend with features like **user onboarding, driver management, ride booking, fare calculation, ride completion, and rating system**.  
-
----
-
-## 📌 Table of Contents  
-- [Overview](#overview)  
-- [Architecture](#architecture)  
-- [Features](#features)  
-- [Tech Stack](#tech-stack)  
-- [Database Design](#database-design)  
-- [Project Structure](#project-structure)  
-- [Getting Started](#getting-started)  
-- [API Endpoints](#api-endpoints)  
-- [Sample Flow](#sample-flow)  
-- [Future Enhancements](#future-enhancements)  
-- [Contributing](#contributing)  
-- [License](#license)  
-
----
 
 ## 📝 Overview  
 
@@ -81,8 +32,6 @@ It is designed to **simulate production-grade APIs** that can be integrated with
 📌 **High-level Flow**:  
 User → REST API → Controller → Service → Repository → Database
 Driver → REST API → Controller → Service → Repository → Database
-
-
 ---
 
 ## 🚀 Features  
